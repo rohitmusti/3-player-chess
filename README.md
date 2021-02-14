@@ -30,7 +30,9 @@ I've always wanted to explore three person chess but have never bought a board (
 
 [ ] define rules about how you can move when you are in check
 
-[ ] visualize board
+[x] visualize board
+
+[ ] label squares
 
 [ ] create system so that you can connect multiple computers to same game
 
