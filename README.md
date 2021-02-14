@@ -30,7 +30,7 @@ I've always wanted to explore three person chess but have never bought a board (
 
 [ ] define rules about how you can move when you are in check
 
-[x] visualize board
+[ ] visualize board
 
 [ ] label squares
 

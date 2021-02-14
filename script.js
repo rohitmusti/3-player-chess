@@ -91,11 +91,12 @@ class Board {
 }
 
 function drawBoard() {
-  var w = 650; // width
-  var h = 450; // height
-  var cx = w * 0.5; // center of board
-  var cy = h * 0.5;
-  var r = cx * 0.9, // radius of board (it is 0.9 because you don't want to go all the way to the edge)
+  var width = 650; // width
+  var height = 450; // height
+  var center_x = width * 0.5; // center of board
+  var center_y = height * 0.5;
+  var radius = center_x * 0.9; // radius of board (it is 0.9 because you don't want to go all the way to the edge)
+  var segments = 6; // a hexagon based shape so 6
 }
 
 // var c = document.getElementById("canvas");
