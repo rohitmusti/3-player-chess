@@ -90,87 +90,91 @@ class Board {
   }
 }
 
-var c = document.getElementById("canvas");
-var ctx = c.getContext("2d");
-
-var w = 650, // width
-  h = 450, // height
-  cx = w * 0.5, // center of board
-  cy = h * 0.5,
-  r = cx * 0.9, // radius of board
-  pi2 = Math.PI * 2, // cache
-  segments = 6, // a hexagon based shape so 6
-  segment = pi2 / segments, // angle of each segment
-  hSegment = segment * 0.5, // half segment for center line
-  ul,
-  ur,
-  bl,
-  br, // quad. corners
-  check = 0.25, // interpolation interval (one check)
-  yc = 0,
-  xc = 0, // interpolation counters
-  toggle = false, // for color
-  x,
-  y = 0,
-  i = 0; // counters...
-
-var ul = {
-  x: cx,
-  y: cy,
-};
-
-var ur = {
-  x: cx + r * Math.cos(hSegment) * 0.865,
-  y: cy + r * Math.sin(hSegment) * 0.865,
-};
-
-var br = {
-  x: cx + r * Math.cos(segment),
-  y: cy + r * Math.sin(segment),
-};
-
-var bl = {
-  x: cx + r * Math.cos(hSegment + segment) * 0.865,
-  y: cy + r * Math.sin(hSegment + segment) * 0.865,
-};
-
-function getInt(p1, p2, t) {
-  return {
-    x: p1.x + (p2.x - p1.x) * t,
-    y: p1.y + (p2.y - p1.y) * t,
-  };
+function drawBoard() {
+  var w = 650; // width
+  var h = 450; // height
+  var cx = w * 0.5; // center of board
+  var cy = h * 0.5;
+  var r = cx * 0.9, // radius of board (it is 0.9 because you don't want to go all the way to the edge)
 }
 
-for (; i < segments; i++) {
-  // loop six segments
-  toggle = !toggle; // alter color each segment
-  // loop quadrilateral grid 4x4 cells (5x5 lines exclusive)
-  for (y = 0, yc = 0; y < 4; y++) {
-    for (x = 0, xc = 0; x < 4; x++) {
-      // for upper lines (ul-ur), get first row:
-      var l1a = getInt(ul, bl, yc),
-        l1b = getInt(ur, br, yc),
-        l2a = getInt(ul, bl, yc + check),
-        l2b = getInt(ur, br, yc + check),
-        c1 = getInt(l1a, l1b, xc),
-        c2 = getInt(l1a, l1b, xc + check),
-        c3 = getInt(l2a, l2b, xc + check),
-        c4 = getInt(l2a, l2b, xc);
+// var c = document.getElementById("canvas");
+// var ctx = c.getContext("2d");
 
-      ctx.beginPath();
-      ctx.moveTo(c1.x, c1.y);
-      ctx.lineTo(c2.x, c2.y);
-      ctx.lineTo(c3.x, c3.y);
-      ctx.lineTo(c4.x, c4.y);
-      ctx.fillStyle = toggle ? "#001711" : "#e9f0ee";
-      ctx.fill();
-      toggle = !toggle;
-      xc += check;
-    }
-    yc += check; // next segment line
-    toggle = !toggle; // toggle per line as well
-  }
-  ctx.translate(cx, cy); // translate to center
-  ctx.rotate(segment); // rotate one segment
-  ctx.translate(-cx, -cy); // translate back
-}
+//   pi2 = Math.PI * 2, // cache
+//   segments = 6, // a hexagon based shape so 6
+//   segment = pi2 / segments, // angle of each segment
+//   hSegment = segment * 0.5, // half segment for center line
+//   ul,
+//   ur,
+//   bl,
+//   br, // quad. corners
+//   check = 0.25, // interpolation interval (one check)
+//   yc = 0,
+//   xc = 0, // interpolation counters
+//   toggle = false, // for color
+//   x,
+//   y = 0,
+//   i = 0; // counters...
+
+// var ul = {
+//   x: cx,
+//   y: cy,
+// };
+
+// var ur = {
+//   x: cx + r * Math.cos(hSegment) * 0.865,
+//   y: cy + r * Math.sin(hSegment) * 0.865,
+// };
+
+// var br = {
+//   x: cx + r * Math.cos(segment),
+//   y: cy + r * Math.sin(segment),
+// };
+
+// var bl = {
+//   x: cx + r * Math.cos(hSegment + segment) * 0.865,
+//   y: cy + r * Math.sin(hSegment + segment) * 0.865,
+// };
+
+// function getInt(p1, p2, t) {
+//   return {
+//     x: p1.x + (p2.x - p1.x) * t,
+//     y: p1.y + (p2.y - p1.y) * t,
+//   };
+// }
+
+// for (; i < segments; i++) {
+//   // loop six segments
+//   toggle = !toggle; // alter color each segment
+//   // loop quadrilateral grid 4x4 cells (5x5 lines exclusive)
+//   for (y = 0, yc = 0; y < 4; y++) {
+//     for (x = 0, xc = 0; x < 4; x++) {
+//       // for upper lines (ul-ur), get first row:
+//       var l1a = getInt(ul, bl, yc),
+//         l1b = getInt(ur, br, yc),
+//         l2a = getInt(ul, bl, yc + check),
+//         l2b = getInt(ur, br, yc + check),
+//         c1 = getInt(l1a, l1b, xc),
+//         c2 = getInt(l1a, l1b, xc + check),
+//         c3 = getInt(l2a, l2b, xc + check),
+//         c4 = getInt(l2a, l2b, xc);
+
+//       ctx.beginPath();
+//       ctx.moveTo(c1.x, c1.y);
+//       ctx.lineTo(c2.x, c2.y);
+//       ctx.lineTo(c3.x, c3.y);
+//       ctx.lineTo(c4.x, c4.y);
+//       ctx.fillStyle = toggle ? "#001711" : "#e9f0ee";
+//       ctx.fill();
+
+//       toggle = !toggle;
+//       xc += check;
+//     }
+//     yc += check; // next segment line
+//     toggle = !toggle; // toggle per line as well
+//   }
+//   ctx.translate(cx, cy); // translate to center
+//   ctx.rotate(segment); // rotate one segment
+//   ctx.translate(-cx, -cy); // translate back
+// }
