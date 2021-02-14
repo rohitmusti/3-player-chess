@@ -82,7 +82,16 @@ class Board {
       );
     }
   }
+
+  move(origPosition, newPosition) {
+    console.log("tried to move from", origPosition, "to", newPosition);
+    // check if there is a piece on the original square
+    // check if that type of move is valid for that type of piece
+    // check if there are any pieces in the way
+    // check if there is a piece on the end square that would become taken
+  }
 }
 
 let p1 = new Board();
 console.log(p1);
+p1.move(["a", 2], ["a", 3]);
