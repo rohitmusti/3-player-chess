@@ -157,12 +157,6 @@ function drawBoard() {
     .append("svg")
     .attr("width", width)
     .attr("height", height);
-  // var poly = [
-  //   { x: 0.0, y: 25.0 },
-  //   { x: 8.5, y: 23.4 },
-  //   { x: 13.0, y: 21.0 },
-  //   { x: 19.0, y: 15.5 },
-  // ];
 
   var polygons = [];
 
@@ -177,11 +171,6 @@ function drawBoard() {
           l1b = getInt(ur, br, yc),
           l2a = getInt(ul, bl, yc + check),
           l2b = getInt(ur, br, yc + check),
-          // c1 = rotate(getInt(l1a, l1b, xc), i),
-          // c2 = rotate(getInt(l1a, l1b, xc + check), i),
-          // c3 = rotate(getInt(l2a, l2b, xc + check), i),
-          // c4 = rotate(getInt(l2a, l2b, xc), i);
-
           c1 = getInt(l1a, l1b, xc),
           c2 = getInt(l1a, l1b, xc + check),
           c3 = getInt(l2a, l2b, xc + check),
@@ -221,53 +210,5 @@ function drawBoard() {
           -1 * center_x
         },${-1 * center_y})`
       );
-    // .attr( "transform",
-    //   `translate(${center_x},${center_y}) rotate(${segments}) translate(${
-    //     -1 * center_x
-    //   }, ${-1 * center_y})`
-    // )
-    // .style("fill", toggle ? "#001711" : "#e9f0ee");
-    // ctx.translate(cx, cy); // translate to center
-    // ctx.rotate(segment); // rotate one segment
-    // ctx.translate(-cx, -cy); // translate back
   }
-  console.log(polygons);
 }
-
-// var c = document.getElementById("canvas");
-// var ctx = c.getContext("2d");
-
-// for (; i < segments; i++) {
-//   // loop six segments
-//   toggle = !toggle; // alter color each segment
-//   // loop quadrilateral grid 4x4 cells (5x5 lines exclusive)
-//   for (y = 0, yc = 0; y < 4; y++) {
-//     for (x = 0, xc = 0; x < 4; x++) {
-//       // for upper lines (ul-ur), get first row:
-//       var l1a = getInt(ul, bl, yc),
-//         l1b = getInt(ur, br, yc),
-//         l2a = getInt(ul, bl, yc + check),
-//         l2b = getInt(ur, br, yc + check),
-//         c1 = getInt(l1a, l1b, xc),
-//         c2 = getInt(l1a, l1b, xc + check),
-//         c3 = getInt(l2a, l2b, xc + check),
-//         c4 = getInt(l2a, l2b, xc);
-
-//       ctx.beginPath();
-//       ctx.moveTo(c1.x, c1.y);
-//       ctx.lineTo(c2.x, c2.y);
-//       ctx.lineTo(c3.x, c3.y);
-//       ctx.lineTo(c4.x, c4.y);
-//       ctx.fillStyle = toggle ? "#001711" : "#e9f0ee";
-//       ctx.fill();
-
-//       toggle = !toggle;
-//       xc += check;
-//     }
-//     yc += check; // next segment line
-//     toggle = !toggle; // toggle per line as well
-//   }
-//   ctx.translate(cx, cy); // translate to center
-//   ctx.rotate(segment); // rotate one segment
-//   ctx.translate(-cx, -cy); // translate back
-// }
