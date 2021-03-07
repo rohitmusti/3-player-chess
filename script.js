@@ -177,6 +177,7 @@ function drawBoard() {
           color: toggle ? "#baca44" : "#cafaa2",
           id: `${i}${x}${y}`,
           center: center([c1, c2, c3, c4]),
+          rotation: i,
         };
 
         polygons.push(poly);
@@ -187,7 +188,6 @@ function drawBoard() {
       yc += check; // next segment line
       toggle = !toggle; // toggle per line as well
     }
-    console.log(polygons);
     vis
       .selectAll("polygon")
       .data(polygons)
@@ -206,12 +206,9 @@ function drawBoard() {
       .attr("id", function (d) {
         return d.id;
       })
-      .attr(
-        "transform",
-        `translate(${center_x},${center_y}) rotate(${60 * i}) translate(${
-          -1 * center_x
-        },${-1 * center_y})`
-      );
+      .attr("transform", function (d) {
+        return `translate(${center_x},${center_y}) rotate(${60 * d.rotation}) translate(${-1 * center_x},${-1 * center_y})`;
+      });
 
     vis
       .selectAll("text")
@@ -224,6 +221,30 @@ function drawBoard() {
       .attr("y", function (d) {
         return d.center.y;
       })
+      .attr("transform", function (d) {
+        return `translate(${center_x},${center_y}) rotate(${60 * d.rotation}) translate(${-1 * center_x},${-1 * center_y})`;
+      })
+      .attr("dy", ".35em")
+      .text(function (d) {
+        return d.id;
+      });
+
+    var labels = [
+      { letter: "A", position: "133" },
+      // { letter: "B", position: "132" },
+    ];
+
+    vis
+      .selectAll("text")
+      .data(labels)
+      .enter()
+      .append("text")
+      .attr("x", function (d) {
+        return 250;
+      })
+      .attr("y", function (d) {
+        return 250;
+      })
       .attr(
         "transform",
         `translate(${center_x},${center_y}) rotate(${60 * i}) translate(${
@@ -232,7 +253,7 @@ function drawBoard() {
       )
       .attr("dy", ".35em")
       .text(function (d) {
-        return d.id;
+        d.letter;
       });
   }
 }

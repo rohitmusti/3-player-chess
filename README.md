@@ -8,7 +8,11 @@ I've always wanted to explore three person chess but have never bought a board (
 
 [x] create board class
 
-[x] initiate board with correct pieces on correct squares
+[x] visualize board
+
+[x] label squares
+
+[ ] initiate board with correct pieces on correct squares
 
 [ ] define piece movement
 
@@ -29,10 +33,6 @@ I've always wanted to explore three person chess but have never bought a board (
 [ ] define rules about what happens to the dead teams pieces (are they removed, do you assume control of them, or do they stay on and can be taken like regular pieces)
 
 [ ] define rules about how you can move when you are in check
-
-[ ] visualize board
-
-[ ] label squares
 
 [ ] create system so that you can connect multiple computers to same game
 
