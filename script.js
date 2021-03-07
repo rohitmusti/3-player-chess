@@ -100,57 +100,6 @@ class Game {
 
 var polygons = [];
 
-var labels = [
-  { letter: "A", position: "133", tweaks_x: 20, tweaks_y: 10 },
-  { letter: "B", position: "132", tweaks_x: 25, tweaks_y: 10 },
-  { letter: "C", position: "131", tweaks_x: 28, tweaks_y: 11 },
-  { letter: "D", position: "130", tweaks_x: 30, tweaks_y: 15 },
-  { letter: "E", position: "003", tweaks_x: -2, tweaks_y: 35 },
-  { letter: "F", position: "013", tweaks_x: -5, tweaks_y: 33 },
-  { letter: "G", position: "023", tweaks_x: -7, tweaks_y: 28 },
-  { letter: "H", position: "033", tweaks_x: -9, tweaks_y: 25 },
-  { letter: "A", position: "233", tweaks_x: -11, tweaks_y: 25 },
-  { letter: "B", position: "223", tweaks_x: -11, tweaks_y: 28 },
-  { letter: "C", position: "213", tweaks_x: -11, tweaks_y: 30 },
-  { letter: "D", position: "203", tweaks_x: -9, tweaks_y: 35 },
-  { letter: "I", position: "330", tweaks_x: 25, tweaks_y: 15 },
-  { letter: "J", position: "331", tweaks_x: 25, tweaks_y: 15 },
-  { letter: "K", position: "332", tweaks_x: 25, tweaks_y: 9 },
-  { letter: "L", position: "333", tweaks_x: 25, tweaks_y: 9 },
-  { letter: "H", position: "533", tweaks_x: 20, tweaks_y: 5 },
-  { letter: "G", position: "532", tweaks_x: 23, tweaks_y: 8 },
-  { letter: "F", position: "531", tweaks_x: 25, tweaks_y: 13 },
-  { letter: "E", position: "530", tweaks_x: 27, tweaks_y: 15 },
-  { letter: "I", position: "403", tweaks_x: -3, tweaks_y: 35 },
-  { letter: "J", position: "413", tweaks_x: -5, tweaks_y: 33 },
-  { letter: "K", position: "423", tweaks_x: -9, tweaks_y: 30 },
-  { letter: "L", position: "433", tweaks_x: -11, tweaks_y: 28 },
-  { letter: "1", position: "133", tweaks_x: -10, tweaks_y: 25 },
-  { letter: "2", position: "123", tweaks_x: -8, tweaks_y: 28 },
-  { letter: "3", position: "113", tweaks_x: -5, tweaks_y: 30 },
-  { letter: "4", position: "103", tweaks_x: -3, tweaks_y: 33 },
-  { letter: "5", position: "230", tweaks_x: 30, tweaks_y: 15 },
-  { letter: "6", position: "231", tweaks_x: 25, tweaks_y: 13 },
-  { letter: "7", position: "232", tweaks_x: 25, tweaks_y: 10 },
-  { letter: "8", position: "233", tweaks_x: 20, tweaks_y: 8 },
-  { letter: "1", position: "033", tweaks_x: 20, tweaks_y: 5 },
-  { letter: "2", position: "032", tweaks_x: 23, tweaks_y: 8 },
-  { letter: "3", position: "031", tweaks_x: 25, tweaks_y: 10 },
-  { letter: "4", position: "030", tweaks_x: 28, tweaks_y: 14 },
-  { letter: "9", position: "503", tweaks_x: -5, tweaks_y: 35 },
-  { letter: "10", position: "513", tweaks_x: -8, tweaks_y: 30 },
-  { letter: "11", position: "523", tweaks_x: -11, tweaks_y: 27 },
-  { letter: "12", position: "533", tweaks_x: -14, tweaks_y: 23 },
-  { letter: "8", position: "333", tweaks_x: -7, tweaks_y: 25 },
-  { letter: "7", position: "323", tweaks_x: -10, tweaks_y: 28 },
-  { letter: "6", position: "313", tweaks_x: -10, tweaks_y: 31 },
-  { letter: "5", position: "303", tweaks_x: -7, tweaks_y: 33 },
-  { letter: "9", position: "430", tweaks_x: 26, tweaks_y: 19 },
-  { letter: "10", position: "431", tweaks_x: 22, tweaks_y: 15 },
-  { letter: "11", position: "432", tweaks_x: 20, tweaks_y: 13 },
-  { letter: "12", position: "433", tweaks_x: 18, tweaks_y: 10 },
-];
-
 const idtopos = {
   a133: { column: "A", row: "1" },
   a123: { column: "A", row: "2" },
@@ -395,7 +344,7 @@ function drawBoard(game) {
       let nl = idtopos[`a${d.id}`];
       let symbol = game.map[`${nl.column}${nl.row}`];
       if (symbol) {
-        return symbol.team;
+        return colorMap[symbol.team];
       } else {
         return "#bababa";
       }
@@ -403,13 +352,13 @@ function drawBoard(game) {
     .attr("transform", function (d) {
       return `translate(${center_x},${center_y}) rotate(${60 * d.rotation}) translate(${-1 * center_x},${-1 * center_y})`;
     })
-    .attr("dy", ".35em")
+    .attr("dy", ".75em")
     .text(function (d) {
       // return d.id;
       let nl = idtopos[`a${d.id}`];
       let symbol = game.map[`${nl.column}${nl.row}`];
       if (symbol) {
-        return symbol.type;
+        return symbol.type.substring(0, 1).toUpperCase();
       } else {
         return `${nl.column}${nl.row}`;
       }
