@@ -12,7 +12,7 @@ I've always wanted to explore three person chess but have never bought a board (
 
 [x] label squares
 
-[ ] initiate board with correct pieces on correct squares
+[x] initiate board with correct pieces on correct squares
 
 [ ] define piece movement
 

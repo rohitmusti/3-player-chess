@@ -1,92 +1,100 @@
 class Piece {
-  constructor(letter, number, type, team) {
-    this.letter = letter;
-    this.number = number;
+  constructor(col, row, type, team) {
+    this.id = Math.random().toString(36).substr(2, 9);
+    this.column = col;
+    this.row = row;
     this.type = type;
     this.team = team;
   }
 }
 
-class Board {
-  constructor() {
-    this.letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"];
-    this.numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-    this.game = {};
-    for (var i = 0; i < this.numbers.length; i++) {
-      for (var j = 0; j < this.letters.length; j++) {
-        this.game[this.letters[j] + this.numbers[i].toString()] = null;
-      }
+class Team {
+  constructor(team) {
+    this.totalmoves = 0;
+    if (team == "red") {
+      this.live_pieces = [
+        new Piece("A", "1", "rook", team),
+        new Piece("B", "1", "knight", team),
+        new Piece("C", "1", "bishop", team),
+        new Piece("D", "1", "queen", team),
+        new Piece("E", "1", "king", team),
+        new Piece("F", "1", "bishop", team),
+        new Piece("G", "1", "knight", team),
+        new Piece("H", "1", "rook", team),
+        new Piece("A", "2", "pawn", team),
+        new Piece("B", "2", "pawn", team),
+        new Piece("C", "2", "pawn", team),
+        new Piece("D", "2", "pawn", team),
+        new Piece("E", "2", "pawn", team),
+        new Piece("F", "2", "pawn", team),
+        new Piece("G", "2", "pawn", team),
+        new Piece("H", "2", "pawn", team),
+      ];
+      this.dead_pieces = [];
     }
-
-    let pattern = [
-      "rook",
-      "knight",
-      "bishop",
-      "queen",
-      "king",
-      "bishop",
-      "knight",
-      "rook",
-    ];
-
-    let redletters = ["a", "b", "c", "d", "e", "f", "g", "h"];
-    for (var i = 0; i < redletters.length; i++) {
-      this.game[redletters[i] + "2"] = new Piece(
-        redletters[i],
-        2,
-        "pawn",
-        "red"
-      );
-
-      this.game[redletters[i] + "1"] = new Piece(
-        redletters[i],
-        1,
-        pattern[i],
-        "red"
-      );
+    if (team == "blue") {
+      this.live_pieces = [
+        new Piece("A", "8", "rook", team),
+        new Piece("B", "8", "knight", team),
+        new Piece("C", "8", "bishop", team),
+        new Piece("D", "8", "queen", team),
+        new Piece("I", "8", "king", team),
+        new Piece("J", "8", "bishop", team),
+        new Piece("K", "8", "knight", team),
+        new Piece("L", "8", "rook", team),
+        new Piece("A", "7", "pawn", team),
+        new Piece("B", "7", "pawn", team),
+        new Piece("C", "7", "pawn", team),
+        new Piece("D", "7", "pawn", team),
+        new Piece("I", "7", "pawn", team),
+        new Piece("J", "7", "pawn", team),
+        new Piece("K", "7", "pawn", team),
+        new Piece("L", "7", "pawn", team),
+      ];
+      this.dead_pieces = [];
     }
-
-    let whiteletters = ["l", "k", "j", "i", "d", "c", "b", "a"];
-    for (var i = 0; i < whiteletters.length; i++) {
-      this.game[whiteletters[i] + "7"] = new Piece(
-        whiteletters[i],
-        7,
-        "pawn",
-        "white"
-      );
-
-      this.game[whiteletters[i] + "8"] = new Piece(
-        whiteletters[i],
-        8,
-        pattern[i],
-        "white"
-      );
-    }
-
-    let blackletters = ["h", "g", "f", "e", "i", "j", "k", "l"];
-    for (var i = 0; i < blackletters.length; i++) {
-      this.game[blackletters[i] + "11"] = new Piece(
-        blackletters[i],
-        11,
-        "pawn",
-        "black"
-      );
-
-      this.game[blackletters[i] + "12"] = new Piece(
-        blackletters[i],
-        12,
-        pattern[i],
-        "black"
-      );
+    if (team == "black") {
+      this.live_pieces = [
+        new Piece("H", "12", "rook", team),
+        new Piece("G", "12", "knight", team),
+        new Piece("F", "12", "bishop", team),
+        new Piece("E", "12", "queen", team),
+        new Piece("I", "12", "king", team),
+        new Piece("J", "12", "bishop", team),
+        new Piece("K", "12", "knight", team),
+        new Piece("L", "12", "rook", team),
+        new Piece("H", "11", "pawn", team),
+        new Piece("G", "11", "pawn", team),
+        new Piece("F", "11", "pawn", team),
+        new Piece("E", "11", "pawn", team),
+        new Piece("I", "11", "pawn", team),
+        new Piece("J", "11", "pawn", team),
+        new Piece("K", "11", "pawn", team),
+        new Piece("L", "11", "pawn", team),
+      ];
+      this.dead_pieces = [];
     }
   }
+}
 
-  move(origPosition, newPosition) {
-    console.log("tried to move from", origPosition, "to", newPosition);
-    // check if there is a piece on the original square
-    // check if that type of move is valid for that type of piece
-    // check if there are any pieces in the way
-    // check if there is a piece on the end square that would become taken
+class Game {
+  constructor() {
+    this.teamred = new Team("red");
+    this.teamblue = new Team("blue");
+    this.teamblack = new Team("black");
+    this.map = {};
+    for (let p in this.teamred.live_pieces) {
+      let piece = this.teamred.live_pieces[p];
+      this.map[`${piece.column}${piece.row}`] = piece;
+    }
+    for (let p in this.teamblue.live_pieces) {
+      let piece = this.teamblue.live_pieces[p];
+      this.map[`${piece.column}${piece.row}`] = piece;
+    }
+    for (let p in this.teamblack.live_pieces) {
+      let piece = this.teamblack.live_pieces[p];
+      this.map[`${piece.column}${piece.row}`] = piece;
+    }
   }
 }
 
@@ -253,7 +261,7 @@ const idtopos = {
   a433: { column: "L", row: "12" },
 };
 
-function drawBoard() {
+function drawBoard(game) {
   var width = 750; // width
   var height = 750; // height
   var center_x = width * 0.5; // center of board
@@ -384,7 +392,13 @@ function drawBoard() {
       return d.center.y;
     })
     .style("fill", function (d) {
-      return "#bababa";
+      let nl = idtopos[`a${d.id}`];
+      let symbol = game.map[`${nl.column}${nl.row}`];
+      if (symbol) {
+        return symbol.team;
+      } else {
+        return "#bababa";
+      }
     })
     .attr("transform", function (d) {
       return `translate(${center_x},${center_y}) rotate(${60 * d.rotation}) translate(${-1 * center_x},${-1 * center_y})`;
@@ -393,7 +407,12 @@ function drawBoard() {
     .text(function (d) {
       // return d.id;
       let nl = idtopos[`a${d.id}`];
-      return `${nl.column}${nl.row}`;
+      let symbol = game.map[`${nl.column}${nl.row}`];
+      if (symbol) {
+        return symbol.type;
+      } else {
+        return `${nl.column}${nl.row}`;
+      }
     });
 
   vis
@@ -417,4 +436,9 @@ function drawBoard() {
     .text(function (d) {
       return d.letter;
     });
+}
+
+function loader() {
+  game = new Game();
+  drawBoard(game);
 }
