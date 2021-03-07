@@ -91,8 +91,8 @@ class Board {
 }
 
 function drawBoard() {
-  var width = 650; // width
-  var height = 450; // height
+  var width = 500; // width
+  var height = 500; // height
   var center_x = width * 0.5; // center of board
   var center_y = height * 0.5;
   var radius = center_x * 0.9; // radius of board (it is 0.9 because you don't want to go all the way to the edge)
@@ -137,6 +137,21 @@ function drawBoard() {
     };
   }
 
+  function rotate(points, num) {
+    if (num == 0) {
+      return points;
+    }
+    return {
+      x:
+        (points.x - 250) * Math.cos(num * segment) -
+        (points.y - 250) * Math.cos(num * segment),
+
+      y:
+        (points.y - 250) * Math.cos(num * segment) -
+        (points.y - 250) * Math.cos(num * segment),
+    };
+  }
+
   var vis = d3
     .select("#chart")
     .append("svg")
@@ -162,31 +177,22 @@ function drawBoard() {
           l1b = getInt(ur, br, yc),
           l2a = getInt(ul, bl, yc + check),
           l2b = getInt(ur, br, yc + check),
+          // c1 = rotate(getInt(l1a, l1b, xc), i),
+          // c2 = rotate(getInt(l1a, l1b, xc + check), i),
+          // c3 = rotate(getInt(l2a, l2b, xc + check), i),
+          // c4 = rotate(getInt(l2a, l2b, xc), i);
+
           c1 = getInt(l1a, l1b, xc),
           c2 = getInt(l1a, l1b, xc + check),
           c3 = getInt(l2a, l2b, xc + check),
           c4 = getInt(l2a, l2b, xc);
 
-        var poly = [c1, c2, c3, c4];
+        const poly = {
+          points: [c1, c2, c3, c4],
+          color: toggle ? "#001711" : "#e9f0ee",
+        };
 
         polygons.push(poly);
-
-        vis
-          .selectAll("polygon")
-          .data([poly])
-          .enter()
-          .append("polygon")
-          .attr("points", function (d) {
-            return d
-              .map(function (d) {
-                return [d.x, d.y].join(",");
-              })
-              .join(" ");
-          })
-          .attr("stroke", "black")
-          .attr("stroke-width", 2);
-        // .translate(xc, yc)
-        // .rotate(segment);
 
         toggle = !toggle;
         xc += check;
@@ -194,6 +200,33 @@ function drawBoard() {
       yc += check; // next segment line
       toggle = !toggle; // toggle per line as well
     }
+    vis
+      .selectAll("polygon")
+      .data(polygons)
+      .enter()
+      .append("polygon")
+      .attr("points", function (d) {
+        return d.points
+          .map(function (d) {
+            return [d.x, d.y].join(",");
+          })
+          .join(" ");
+      })
+      .style("fill", function (d) {
+        return d.color;
+      })
+      .attr(
+        "transform",
+        `translate(${center_x},${center_y}) rotate(${60 * i}) translate(${
+          -1 * center_x
+        },${-1 * center_y})`
+      );
+    // .attr( "transform",
+    //   `translate(${center_x},${center_y}) rotate(${segments}) translate(${
+    //     -1 * center_x
+    //   }, ${-1 * center_y})`
+    // )
+    // .style("fill", toggle ? "#001711" : "#e9f0ee");
     // ctx.translate(cx, cy); // translate to center
     // ctx.rotate(segment); // rotate one segment
     // ctx.translate(-cx, -cy); // translate back
