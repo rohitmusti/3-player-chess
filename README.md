@@ -2,7 +2,7 @@
 
 I've always wanted to explore three person chess but have never bought a board (they're a bit expensive and take up a lot of space). Instead of investing in a physical one, I thought I'd try and make a digital one! Here is the [example ruleset](https://www.ymimports.com/pages/how-to-play-three-player-chess). Another [ruleset](https://greenchess.net/rules.php?v=three-player).
 
-## TODOs
+## Base Game
 
 [x] create pieces class
 
@@ -36,13 +36,13 @@ I've always wanted to explore three person chess but have never bought a board (
 
 [ ] define rules about how you can move when you are in check
 
+## Extras
+
 [ ] create system so that you can connect multiple computers to same game
 
 [ ] create system for being able to play multiple games at once
 
 - this will probably start out as a link system
-
-## Extras
 
 [ ] create way of showing what moves are available to a given piece
 
