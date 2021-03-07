@@ -335,7 +335,7 @@ function drawBoard() {
 
         const poly = {
           points: [c1, c2, c3, c4],
-          color: toggle ? "#baca44" : "#cafaa2",
+          color: toggle ? "#919191" : "#d1d1d1",
           id: `${i}${x}${y}`,
           center: center([c1, c2, c3, c4]),
           rotation: i,
@@ -382,6 +382,9 @@ function drawBoard() {
     })
     .attr("y", function (d) {
       return d.center.y;
+    })
+    .style("fill", function (d) {
+      return "#bababa";
     })
     .attr("transform", function (d) {
       return `translate(${center_x},${center_y}) rotate(${60 * d.rotation}) translate(${-1 * center_x},${-1 * center_y})`;
