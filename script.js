@@ -97,53 +97,112 @@ function drawBoard() {
   var center_y = height * 0.5;
   var radius = center_x * 0.9; // radius of board (it is 0.9 because you don't want to go all the way to the edge)
   var segments = 6; // a hexagon based shape so 6
+  var segment = (Math.PI * 2) / segments; // angle of each segment
+  var halfSegment = segment * 0.5; // half segment for center line
+  var ul, ur, bl, br; // quad. corners
+  var check = 0.25; // interpolation interval (one check)
+  var yc = 0;
+  var xc = 0; // interpolation counters
+  var toggle = false; // for color
+  var x = 0,
+    y = 0,
+    i = 0; //counters
+
+  // setting the first tile
+
+  var ul = {
+    x: center_x,
+    y: center_y,
+  };
+
+  var ur = {
+    x: center_x + radius * Math.cos(halfSegment) * 0.865,
+    y: center_y + radius * Math.sin(halfSegment) * 0.865,
+  };
+
+  var br = {
+    x: center_x + radius * Math.cos(segment),
+    y: center_y + radius * Math.sin(segment),
+  };
+
+  var bl = {
+    x: center_x + radius * Math.cos(halfSegment + segment) * 0.865,
+    y: center_y + radius * Math.sin(halfSegment + segment) * 0.865,
+  };
+
+  function getInt(p1, p2, t) {
+    return {
+      x: p1.x + (p2.x - p1.x) * t,
+      y: p1.y + (p2.y - p1.y) * t,
+    };
+  }
+
+  var vis = d3
+    .select("#chart")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
+  // var poly = [
+  //   { x: 0.0, y: 25.0 },
+  //   { x: 8.5, y: 23.4 },
+  //   { x: 13.0, y: 21.0 },
+  //   { x: 19.0, y: 15.5 },
+  // ];
+
+  var polygons = [];
+
+  for (; i < segments; i++) {
+    // loop six segments
+    toggle = !toggle; // alter color each segment
+    // loop quadrilateral grid 4x4 cells (5x5 lines exclusive)
+    for (y = 0, yc = 0; y < 4; y++) {
+      for (x = 0, xc = 0; x < 4; x++) {
+        // for upper lines (ul-ur), get first row:
+        var l1a = getInt(ul, bl, yc),
+          l1b = getInt(ur, br, yc),
+          l2a = getInt(ul, bl, yc + check),
+          l2b = getInt(ur, br, yc + check),
+          c1 = getInt(l1a, l1b, xc),
+          c2 = getInt(l1a, l1b, xc + check),
+          c3 = getInt(l2a, l2b, xc + check),
+          c4 = getInt(l2a, l2b, xc);
+
+        var poly = [c1, c2, c3, c4];
+
+        polygons.push(poly);
+
+        vis
+          .selectAll("polygon")
+          .data([poly])
+          .enter()
+          .append("polygon")
+          .attr("points", function (d) {
+            return d
+              .map(function (d) {
+                return [d.x, d.y].join(",");
+              })
+              .join(" ");
+          })
+          .attr("stroke", "black")
+          .attr("stroke-width", 2);
+        // .translate(xc, yc)
+        // .rotate(segment);
+
+        toggle = !toggle;
+        xc += check;
+      }
+      yc += check; // next segment line
+      toggle = !toggle; // toggle per line as well
+    }
+    // ctx.translate(cx, cy); // translate to center
+    // ctx.rotate(segment); // rotate one segment
+    // ctx.translate(-cx, -cy); // translate back
+  }
+  console.log(polygons);
 }
 
 // var c = document.getElementById("canvas");
 // var ctx = c.getContext("2d");
-
-//   pi2 = Math.PI * 2, // cache
-//   segments = 6, // a hexagon based shape so 6
-//   segment = pi2 / segments, // angle of each segment
-//   hSegment = segment * 0.5, // half segment for center line
-//   ul,
-//   ur,
-//   bl,
-//   br, // quad. corners
-//   check = 0.25, // interpolation interval (one check)
-//   yc = 0,
-//   xc = 0, // interpolation counters
-//   toggle = false, // for color
-//   x,
-//   y = 0,
-//   i = 0; // counters...
-
-// var ul = {
-//   x: cx,
-//   y: cy,
-// };
-
-// var ur = {
-//   x: cx + r * Math.cos(hSegment) * 0.865,
-//   y: cy + r * Math.sin(hSegment) * 0.865,
-// };
-
-// var br = {
-//   x: cx + r * Math.cos(segment),
-//   y: cy + r * Math.sin(segment),
-// };
-
-// var bl = {
-//   x: cx + r * Math.cos(hSegment + segment) * 0.865,
-//   y: cy + r * Math.sin(hSegment + segment) * 0.865,
-// };
-
-// function getInt(p1, p2, t) {
-//   return {
-//     x: p1.x + (p2.x - p1.x) * t,
-//     y: p1.y + (p2.y - p1.y) * t,
-//   };
-// }
 
 // for (; i < segments; i++) {
 //   // loop six segments
