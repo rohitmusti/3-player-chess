@@ -26,6 +26,8 @@ I've always wanted to explore three person chess but have never bought a board (
 
 - you can't move other teams piece on your turn
 
+- you can't enter invalid movement strings to text field
+
 - if someone is eliminated, skip their turn
 
 [ ] define rules about pawns reaching another teams "base"
