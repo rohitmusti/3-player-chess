@@ -90,9 +90,11 @@ class Board {
   }
 }
 
+var polygons = [];
+
 function drawBoard() {
-  var width = 500; // width
-  var height = 500; // height
+  var width = 550; // width
+  var height = 550; // height
   var center_x = width * 0.5; // center of board
   var center_y = height * 0.5;
   var radius = center_x * 0.9; // radius of board (it is 0.9 because you don't want to go all the way to the edge)
@@ -137,18 +139,14 @@ function drawBoard() {
     };
   }
 
-  function rotate(points, num) {
-    if (num == 0) {
-      return points;
-    }
+  function center(points) {
+    let c1x = (points[0].x + points[1].x + points[3].x) / 3;
+    let c1y = (points[0].y + points[1].y + points[3].y) / 3;
+    let c2x = (points[1].x + points[2].x + points[3].x) / 3;
+    let c2y = (points[1].y + points[2].y + points[3].y) / 3;
     return {
-      x:
-        (points.x - 250) * Math.cos(num * segment) -
-        (points.y - 250) * Math.cos(num * segment),
-
-      y:
-        (points.y - 250) * Math.cos(num * segment) -
-        (points.y - 250) * Math.cos(num * segment),
+      x: (c1x + c2x) / 2,
+      y: (c1y + c2y) / 2,
     };
   }
 
@@ -157,8 +155,6 @@ function drawBoard() {
     .append("svg")
     .attr("width", width)
     .attr("height", height);
-
-  var polygons = [];
 
   for (; i < segments; i++) {
     // loop six segments
@@ -178,7 +174,9 @@ function drawBoard() {
 
         const poly = {
           points: [c1, c2, c3, c4],
-          color: toggle ? "#001711" : "#e9f0ee",
+          color: toggle ? "#baca44" : "#cafaa2",
+          id: `${i}${x}${y}`,
+          center: center([c1, c2, c3, c4]),
         };
 
         polygons.push(poly);
@@ -189,6 +187,7 @@ function drawBoard() {
       yc += check; // next segment line
       toggle = !toggle; // toggle per line as well
     }
+    console.log(polygons);
     vis
       .selectAll("polygon")
       .data(polygons)
@@ -204,11 +203,36 @@ function drawBoard() {
       .style("fill", function (d) {
         return d.color;
       })
+      .attr("id", function (d) {
+        return d.id;
+      })
       .attr(
         "transform",
         `translate(${center_x},${center_y}) rotate(${60 * i}) translate(${
           -1 * center_x
         },${-1 * center_y})`
       );
+
+    vis
+      .selectAll("text")
+      .data(polygons)
+      .enter()
+      .append("text")
+      .attr("x", function (d) {
+        return d.center.x - 10;
+      })
+      .attr("y", function (d) {
+        return d.center.y;
+      })
+      .attr(
+        "transform",
+        `translate(${center_x},${center_y}) rotate(${60 * i}) translate(${
+          -1 * center_x
+        },${-1 * center_y})`
+      )
+      .attr("dy", ".35em")
+      .text(function (d) {
+        return d.id;
+      });
   }
 }
