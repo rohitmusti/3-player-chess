@@ -5,6 +5,7 @@ class Piece {
     this.row = row;
     this.type = type;
     this.team = team;
+    this.moved = false;
   }
 }
 
@@ -95,6 +96,49 @@ class Game {
       let piece = this.teamblack.live_pieces[p];
       this.map[`${piece.column}${piece.row}`] = piece;
     }
+  }
+
+  move(startpos, endpos) {
+    let startPiece = this.map[startpos];
+    let endPiece = this.map[endpos];
+
+    //movement rule 1: ensure there is a piece on the start square
+    if (!startPiece) {
+      console.log("cannot move: start square blank");
+    }
+
+    //movement rule 2: ensure there is either a piece from another team or no piece on the end square
+    if (endPiece) {
+      if (startPiece.team == endPiece.team) {
+        console.log(
+          "cannot move: moving to a square occupied by a piece of the same team"
+        );
+      }
+    }
+
+    //movement rule 3: ensure it is a valid movement for that piece type
+    if (startPiece.type == "pawn") {
+      // pawns can only move forward 1 (forward 2 if first turn) or diagonal one to capture
+      console.log(startpos.substring(0, 1), startpos.substring(1, 2));
+    }
+
+    if (startPiece.type == "rook") {
+    }
+
+    if (startPiece.type == "knight") {
+    }
+
+    if (startPiece.type == "bishop") {
+    }
+
+    if (startPiece.type == "queen") {
+    }
+
+    if (startPiece.type == "king") {
+    }
+
+    console.log(startpos, this.map[startpos]);
+    console.log(endpos, this.map[endpos]);
   }
 }
 
@@ -277,7 +321,18 @@ function drawBoard(game) {
     });
 }
 
+function clickHandler(curgame) {
+  var startpos = document.getElementById("startpos").value;
+  var endpos = document.getElementById("endpos").value;
+  curgame.move(startpos, endpos);
+}
+
 function loader() {
   game = new Game();
   drawBoard(game);
+  document
+    .getElementById("movebtn")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+    });
 }

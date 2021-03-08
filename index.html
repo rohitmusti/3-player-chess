@@ -19,7 +19,12 @@
           <input type="text" id="startpos" name="startpos" /><br /><br />
           <label for="endpos">Ending Position:</label><br />
           <input type="text" id="endpos" name="endpos" /><br /><br />
-          <input type="submit" value="Move" />
+          <input
+            id="movebtn"
+            type="submit"
+            value="Move"
+            onclick="clickHandler(game)"
+          />
         </form>
       </div>
     </div>

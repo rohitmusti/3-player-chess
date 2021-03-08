@@ -30,6 +30,8 @@ I've always wanted to explore three person chess but have never bought a board (
 
 - if someone is eliminated, skip their turn
 
+- implement empassant
+
 [ ] define rules about pawns reaching another teams "base"
 
 [ ] define rules about what happens to the dead teams pieces (are they removed, do you assume control of them, or do they stay on and can be taken like regular pieces)
