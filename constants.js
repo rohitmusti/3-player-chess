@@ -1,7 +1,7 @@
 const colorMap = {
-  red: "#ff5252",
-  blue: "#72a5f2",
-  black: "#282929",
+  red: "#bf0f15",
+  blue: "#132091",
+  black: "#0c0c0c",
 };
 
 const labels = [
