@@ -99,30 +99,133 @@ class Game {
   }
 
   move(startpos, endpos) {
+    let r1 = [1, 2, 3, 4, 5, 6, 7, 8];
+    let r2 = [1, 2, 3, 4, 9, 10, 11, 12];
+    let r3 = [8, 7, 6, 5, 9, 10, 11, 12];
+    let rows = [r1, r2, r3];
+    let c1 = ["A", "B", "C", "D", "E", "F", "G", "H"];
+    let c2 = ["A", "B", "C", "D", "I", "J", "K", "L"];
+    let c3 = ["H", "G", "F", "E", "I", "J", "K", "L"];
+    let cols = [c1, c2, c3];
     let startPiece = this.map[startpos];
     let endPiece = this.map[endpos];
 
-    //movement rule 1: ensure there is a piece on the start square
-    if (!startPiece) {
-      console.log("cannot move: start square blank");
+    //movement rule: make sure that the end position exists
+    let validspots = [];
+    for (let o in idtopos) {
+      validspots.push(`${idtopos[o]["column"]}${idtopos[o]["row"]}`);
+    }
+    if (!validspots.includes(endpos)) {
+      console.log("cannot move: end position isn't real");
+      return;
     }
 
-    //movement rule 2: ensure there is either a piece from another team or no piece on the end square
+    //movement rule: ensure there is a piece on the start square
+    if (!startPiece) {
+      console.log("cannot move: start square blank");
+      return;
+    }
+
+    //movement rule: the piece has to move somewhere
+    if (startpos == endpos) {
+      console.log("cannot move: start and end positions are the same");
+      return;
+    }
+
+    //movement rule: ensure there is either a piece from another team or no piece on the end square
     if (endPiece) {
       if (startPiece.team == endPiece.team) {
         console.log(
           "cannot move: moving to a square occupied by a piece of the same team"
         );
+        return;
       }
     }
 
-    //movement rule 3: ensure it is a valid movement for that piece type
+    let start_column = startpos.substring(0, 1);
+    let start_row = Number(startpos.substring(1, 2));
+    let end_column = endpos.substring(0, 1);
+    let end_row = Number(endpos.substring(1, 2));
+
+    //movement rule: ensure it is a valid movement for that piece type
     if (startPiece.type == "pawn") {
       // pawns can only move forward 1 (forward 2 if first turn) or diagonal one to capture
-      console.log(startpos.substring(0, 1), startpos.substring(1, 2));
+      // pawns need to move towards an enemy's base
+      let possible = false;
+      if (start_column === end_column) {
+        // if the start and end column are the same and
+        possible = true;
+      }
     }
 
     if (startPiece.type == "rook") {
+      // rooks can move either along their row or along their column
+      // they cannot jump over other pieces
+      if (start_column != end_column && start_row != end_row) {
+        console.log(
+          "cannot move: for the rook both the column and row does not match"
+        );
+        return;
+      }
+      if (start_column == end_column) {
+        // find the rowset that both the start and end position are in and confirm that
+        // there are no pieces in between the start and end!
+        for (let row in rows) {
+          if (rows[row].includes(start_row) && rows[row].includes(end_row)) {
+            let starter =
+              Math.min(
+                rows[row].indexOf(start_row),
+                rows[row].indexOf(end_row)
+              ) + 1;
+            let ender =
+              Math.max(
+                rows[row].indexOf(start_row),
+                rows[row].indexOf(end_row)
+              ) - 1;
+            let iterarray = Array.from(
+              { length: ender - starter + 1 },
+              (_, i) => i + starter
+            );
+            for (ele in iterrarray) {
+              let cur = rows[row][iterrarray[ele]];
+              if (this.map[`${start_column}${cur}`]) {
+                console.log("cannot move: one of the squares is occupied!");
+                return;
+              }
+            }
+          }
+        }
+      }
+
+      if (start_row == end_row) {
+        // find the rowset that both the start and end position are in and confirm that
+        // there are no pieces in between the start and end!
+        for (let col in cols) {
+          if (cols[col].includes(start_col) && cols[col].includes(end_col)) {
+            let starter =
+              Math.min(
+                cols[col].indexOf(start_col),
+                cols[col].indexOf(end_col)
+              ) + 1;
+            let ender =
+              Math.max(
+                cols[col].indexOf(start_col),
+                cols[col].indexOf(end_col)
+              ) - 1;
+            let iterarray = Array.from(
+              { length: ender - starter + 1 },
+              (_, i) => i + starter
+            );
+            for (ele in iterrarray) {
+              let cur = cols[col][iterrarray[ele]];
+              if (this.map[`${cur}${start_row}`]) {
+                console.log("cannot move: one of the squares is occupied!");
+                return;
+              }
+            }
+          }
+        }
+      }
     }
 
     if (startPiece.type == "knight") {
