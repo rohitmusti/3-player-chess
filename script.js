@@ -200,6 +200,7 @@ class Game {
       if (start_row == end_row) {
         // find the rowset that both the start and end position are in and confirm that
         // there are no pieces in between the start and end!
+        // castling
         for (let col in cols) {
           if (cols[col].includes(start_col) && cols[col].includes(end_col)) {
             let starter =
