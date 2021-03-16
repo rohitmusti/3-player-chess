@@ -170,7 +170,7 @@ class Game {
       if (start_column == end_column) {
         // find the rowset that both the start and end position are in and confirm that
         // there are no pieces in between the start and end!
-        for (let row in rows) {
+        for (let row = 0; row < rows.length; row++) {
           if (rows[row].includes(start_row) && rows[row].includes(end_row)) {
             let starter =
               Math.min(
@@ -183,10 +183,10 @@ class Game {
                 rows[row].indexOf(end_row)
               ) - 1;
             let iterarray = Array.from(
-              { length: ender - starter + 1 },
+              { length: ender - starter },
               (_, i) => i + starter
             );
-            for (ele in iterrarray) {
+            for (let ele; ele < iterarray.length; ele++) {
               let cur = rows[row][iterrarray[ele]];
               if (this.map[`${start_column}${cur}`]) {
                 console.log("cannot move: one of the squares is occupied!");
@@ -195,13 +195,11 @@ class Game {
             }
           }
         }
-      }
-
-      if (start_row == end_row) {
+      } else if (start_row == end_row) {
         // find the rowset that both the start and end position are in and confirm that
         // there are no pieces in between the start and end!
         // castling
-        for (let col in cols) {
+        for (let col = 0; col < cols.length; col++) {
           if (cols[col].includes(start_col) && cols[col].includes(end_col)) {
             let starter =
               Math.min(
@@ -214,10 +212,10 @@ class Game {
                 cols[col].indexOf(end_col)
               ) - 1;
             let iterarray = Array.from(
-              { length: ender - starter + 1 },
+              { length: ender - starter },
               (_, i) => i + starter
             );
-            for (ele in iterrarray) {
+            for (let ele; ele < iterarray.length; ele++) {
               let cur = cols[col][iterrarray[ele]];
               if (this.map[`${cur}${start_row}`]) {
                 console.log("cannot move: one of the squares is occupied!");
@@ -226,13 +224,78 @@ class Game {
             }
           }
         }
+      } else {
+        console.log(
+          "cannot move: neither the rows nor the columns lined up. This code should be unreachable!"
+        );
       }
     }
 
     if (startPiece.type == "knight") {
+      // knights can move along L shapes! that is any 1 row move, 2 column move or 2 row move, 1 column move
     }
 
     if (startPiece.type == "bishop") {
+      // bishops move diagonal, that's it, thank god
+
+      for (let row = 0; row < rows.length; row++) {
+        if (rows[row].includes(start_row) && rows[row].includes(end_row)) {
+          for (let col = 0; col < cols.length; col++) {
+            if (cols[col].includes(start_col) && cols[col].includes(end_col)) {
+              if (
+                Math.abs(
+                  rows[row].indexOf(start_row) - rows[row].indexOf(end_row)
+                ) ==
+                Math.abs(
+                  cols[col].indexOf(start_col) - cols[col].indexOf(end_col)
+                )
+              ) {
+                let starter_cols =
+                  Math.min(
+                    cols[col].indexOf(start_col),
+                    cols[col].indexOf(end_col)
+                  ) + 1;
+                let ender_cols =
+                  Math.max(
+                    cols[col].indexOf(start_col),
+                    cols[col].indexOf(end_col)
+                  ) - 1;
+
+                let starter_rows =
+                  Math.min(
+                    cols[col].indexOf(start_col),
+                    cols[col].indexOf(end_col)
+                  ) + 1;
+                let ender_rows =
+                  Math.max(
+                    cols[col].indexOf(start_col),
+                    cols[col].indexOf(end_col)
+                  ) - 1;
+
+                let iterarray_cols = Array.from(
+                  { length: ender_cols - starter_cols },
+                  (_, i) => i + starter_cols
+                );
+                let iterarray_rows = Array.from(
+                  { length: ender_rows - starter_rows },
+                  (_, i) => i + starter_rows
+                );
+                for (let ele; ele < iterarray_cols.length; ele++) {
+                  let cur_col = cols[col][iterarray_cols[ele]];
+                  let cur_row = rows[row][iterarray_rows[ele]];
+                  if (this.map[`${cur_col}${cur_row}`]) {
+                    console.log("cannot move: one of the squares is occupied!");
+                    return;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      console.log(
+        "cannot move: no valid row, column combination such that the move was truly diagonal"
+      );
     }
 
     if (startPiece.type == "queen") {
