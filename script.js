@@ -332,6 +332,51 @@ class Game {
     }
 
     if (startPiece.type == "king") {
+      // one step in any direction
+      // cannot move into check
+      for (let row = 0; row < rows.length; row++) {
+        if (rows[row].includes(start_row) && rows[row].includes(end_row)) {
+          for (let col = 0; col < cols.length; col++) {
+            if (cols[col].includes(start_col) && cols[col].includes(end_col)) {
+              if (
+                Math.abs(
+                  rows[row].indexOf(start_row) - rows[row].indexOf(end_row)
+                ) == 1 &&
+                Math.abs(
+                  cols[col].indexOf(start_col) - cols[col].indexOf(end_col)
+                ) == 0
+              ) {
+                // valid move
+                console.log("correct move");
+              } else if (
+                Math.abs(
+                  rows[row].indexOf(start_row) - rows[row].indexOf(end_row)
+                ) == 0 &&
+                Math.abs(
+                  cols[col].indexOf(start_col) - cols[col].indexOf(end_col)
+                ) == 1
+              ) {
+                // valid move
+                console.log("correct move");
+              } else if (
+                Math.abs(
+                  rows[row].indexOf(start_row) - rows[row].indexOf(end_row)
+                ) == 1 &&
+                Math.abs(
+                  cols[col].indexOf(start_col) - cols[col].indexOf(end_col)
+                ) == 1
+              ) {
+                // valid move
+                console.log("correct move");
+              } else {
+                console.log(
+                  "cannot move: you are trying to move your king more than one row and/or one column"
+                );
+              }
+            }
+          }
+        }
+      }
     }
 
     console.log(startpos, this.map[startpos]);
